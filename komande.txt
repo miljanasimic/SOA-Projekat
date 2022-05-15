@@ -1,0 +1,8 @@
+kind create cluster
+kubectl cluster-info --context kind-kind
+arkade install openfaas
+kubectl -n openfaas get deployments -l "release=openfaas, app=openfaas
+PASSWORD=$(kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode; echo)
+echo -n $PASSWORD
+kubectl rollout status -n openfaas deploy/gateway
+kubectl port-forward -n openfaas svc/gateway 8080:8080
