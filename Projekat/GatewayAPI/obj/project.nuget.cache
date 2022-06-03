@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "F3LDqy1MtSIcnsRxVoPLRpJHKCfWaxdy1BxRAfXymAMLS625bUEj+8T3jIOJtze+YYYnV3F6AyGKn2hKPk0fgA==",
+  "success": true,
+  "projectFilePath": "E:\\Fakultet\\VIII_semestar\\Servisno orijentisane arhitekture\\SOA-Projekat\\Projekat\\GatewayAPI\\GatewayAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Uros\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Uros\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+  ],
+  "logs": []
+}
