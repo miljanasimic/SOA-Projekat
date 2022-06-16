@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using GatewayLogic.Interfaces;
+using GatewayLogic.Services;
 
 namespace GatewayAPI
 {
@@ -32,6 +34,10 @@ namespace GatewayAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GatewayAPI", Version = "v1" });
             });
+
+            //services.AddScoped<ICircuitService, CircuitService>();
+            services.AddHttpClient<ICircuitService, CircuitService>()
+                    .SetHandlerLifetime(TimeSpan.FromMinutes(5));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
