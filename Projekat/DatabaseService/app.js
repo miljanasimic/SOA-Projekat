@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use((req, res, next) => methodsMiddleware(req, res, next));
 
-const uri = "mongodb://localhost:27017/nba-data?retryWrites=true&w=majority";
+const uri = "mongodb://localhost:27017/f1-data?retryWrites=true&w=majority";
 
 mongoose.connect(uri).then(() => {
     console.log('Connection to database successfull.')
