@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+var uniqueValidator = require('mongoose-unique-validator');
 
 const driverSchema = new mongoose.Schema({
-    driverId: Number,
+    driverId: {
+        type: Number,
+        required: true,
+        index: { unique: true }
+    },
     driverRef: String,
     number: Number,
     code: String,
@@ -11,9 +16,14 @@ const driverSchema = new mongoose.Schema({
     nationality: String,
     url: String
 });
+driverSchema.plugin(uniqueValidator);
 
 const circuitSchema = new mongoose.Schema({
-    circuitId: Number,
+    circuitId: {
+        type: Number,
+        required: true,
+        index: { unique: true }
+    },
     circuitRef: String,
     name: String,
     location: String,
@@ -23,9 +33,14 @@ const circuitSchema = new mongoose.Schema({
     alt: Number,
     url: String
 });
+circuitSchema.plugin(uniqueValidator);
 
 const raceSchema = new mongoose.Schema({
-    raceId: Number,
+    raceId: {
+        type: Number,
+        required: true,
+        index: { unique: true }
+    },
     year: Number,
     round: Number,
     circuitId: Number,
@@ -34,6 +49,7 @@ const raceSchema = new mongoose.Schema({
     time: String,
     url: String
 });
+raceSchema.plugin(uniqueValidator);
 
 const Driver = mongoose.model('Driver', driverSchema);
 const Circuit = mongoose.model('Circuit', circuitSchema);
