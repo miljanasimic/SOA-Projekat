@@ -29,12 +29,12 @@ router.post("", async(req, res)=>{
     )
 })
 
-router.put("", async(req, res)=> {
-    if (!req.body.driverId)
+router.put("/:id", async(req, res)=> {
+    if (!req.params.id)
         return res.status(409).send(`PUT Request faild! DriverId is missing`)
-    const driver = await Driver.findOne({driverId : req.body.driverId})
+    const driver = await Driver.findOne({driverId : parseInt(req.params.id)})
     if (!driver) 
-        return res.status(409).send(`PUT Request faild! Driver with id ${req.body.driverId} not found`)
+        return res.status(409).send(`PUT Request faild! Driver with id ${req.params.id} not found`)
 
     if (req.body.driverRef)
         driver.driverRef = req.body.driverRef
@@ -67,7 +67,7 @@ router.delete("/:id", async(req, res)=>{
     .then((result)=>{
         console.log(result)
         if (result.deletedCount===0)
-            return res.status(409).send(`DELETE Request faild! Driver with id ${req.body.driverId} not found`)
+            return res.status(409).send(`DELETE Request faild! Driver with id ${req.params.id} not found`)
         return res.send("Driver deleted successfully")
     })
     .catch((err)=>

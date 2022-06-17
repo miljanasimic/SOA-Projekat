@@ -29,13 +29,13 @@ router.post("", async(req, res)=>{
     
 })
 
-router.put("", async(req, res)=> {
+router.put("/:id", async(req, res)=> {
     console.log("cao")
-    if (!req.body.raceId)
+    if (!req.params.id)
         return res.status(409).send(`PUT Request faild! RaceId is missing`)
-    const race = await Race.findOne({raceId : req.body.raceId})
+    const race = await Race.findOne({raceId : parseInt(req.params.id)})
     if (!race) 
-        return res.status(409).send(`PUT Request faild! race with id ${req.body.raceId} not found`)
+        return res.status(409).send(`PUT Request faild! race with id ${req.params.id} not found`)
 
     if (req.body.year)
         race.year = req.body.year
@@ -68,7 +68,7 @@ router.delete("/:id", async(req, res)=>{
     .then((result)=>{
         console.log(result)
         if (result.deletedCount===0)
-            return res.status(409).send(`DELETE Request faild! Race with id ${req.body.raceId} not found`)
+            return res.status(409).send(`DELETE Request faild! Race with id ${req.params.id} not found`)
         return res.send("Race deleted successfully")
     })
     .catch((err)=>
