@@ -35,13 +35,17 @@ namespace GatewayAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GatewayAPI", Version = "v1" });
             });
 
-            //services.AddScoped<ICircuitService, CircuitService>();
-            services.AddHttpClient<ICircuitService, CircuitService>()
-                    .ConfigureHttpClient(client =>
-                    {
-                        client.BaseAddress = new Uri("https://api-formula-1.p.rapidapi.com");
-                    })
-                    .SetHandlerLifetime(TimeSpan.FromMinutes(5));
+            services.AddScoped<ICircuitService, CircuitService>();
+
+            services.AddHttpClient("ApiHttpClient", client =>
+            {
+                client.BaseAddress = new Uri("https://api-formula-1.p.rapidapi.com");
+            }).SetHandlerLifetime(TimeSpan.FromMinutes(5));
+
+            services.AddHttpClient("ServiceHttpClient", client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:3000");
+            }).SetHandlerLifetime(TimeSpan.FromMinutes(5));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

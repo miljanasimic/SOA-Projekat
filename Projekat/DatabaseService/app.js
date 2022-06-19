@@ -16,7 +16,7 @@ app.use(express.json());
 app.use((req, res, next) => methodsMiddleware(req, res, next));
 app.use("/drivers", driversRoutes)
 app.use("/races", racesRoutes)
-app.use("/circutis", circuitsRoutes)
+app.use("/circuits", circuitsRoutes)
 
 const uri = "mongodb://localhost:27017/f1-data?retryWrites=true&w=majority";
 
