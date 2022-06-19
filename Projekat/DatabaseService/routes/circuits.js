@@ -9,13 +9,13 @@ router.get("", (req, res) => {
         response.forEach(el=> dtoResponse.push(Circuit.toDTO(el)))
         return res.send(dtoResponse)
     })
-    .catch(err=> res.status(409).send(err.message))
+    .catch(err=> res.status(400).send(err.message))
 })
 
 router.get("/:id", (req, res) => {
     Circuit.findOne({circuitId: parseInt(req.params.id)})
     .then(response => res.send(Circuit.toDTO(response)))
-    .catch(err=> res.status(409).send(err.message))
+    .catch(err=> res.status(404).send(err.message))
 })
 
 module.exports = router;

@@ -1,9 +1,26 @@
+
 const express = require("express");
 const router = express.Router();
 const {Race} = require("../models")
 
 router.get("", async(req, res)=>{
-    
+    Race.find({}, 'raceId year')
+    .then(response => {
+        const dtoResponse = []
+        response.forEach(el=> dtoResponse.push(Race.toDTO(el)))
+        return res.send(dtoResponse)
+    })
+    .catch(err=> res.status(400).send(err.message))
+})
+
+router.get("/:id", async(req, res)=>{
+    Race.findOne({raceId: parseInt(req.params.id)}, 'raceId year')
+    .then(response => {
+        if(response)
+            return res.send(Race.toDTO(response))
+        return res.status(404).send(`GET Request faild! Race with id ${req.params.id} not found`)
+    })
+    .catch(err=> res.status(400).send(err.message))
 })
 
 router.post("", async(req, res)=>{
@@ -19,23 +36,20 @@ router.post("", async(req, res)=>{
     })
 
     race.save()
-    .then((result)=>{
+    .then(result=>{
         console.log(result)
         res.send("Race created successfully")
     })
-    .catch((err)=>
-        res.status(409).send(err.message)
-    )
+    .catch(err => res.status(400).send(err.message))
     
 })
 
 router.put("/:id", async(req, res)=> {
-    console.log("cao")
     if (!req.params.id)
-        return res.status(409).send(`PUT Request faild! RaceId is missing`)
+        return res.status(400).send(`PUT Request faild! RaceId is missing`)
     const race = await Race.findOne({raceId : parseInt(req.params.id)})
     if (!race) 
-        return res.status(409).send(`PUT Request faild! race with id ${req.params.id} not found`)
+        return res.status(404).send(`PUT Request faild! Race with id ${req.params.id} not found`)
 
     if (req.body.year)
         race.year = req.body.year
@@ -57,10 +71,7 @@ router.put("/:id", async(req, res)=> {
         console.log(result)
         res.send("Race updated successfully")
     })
-    .catch((err)=>
-        res.status(409).send(err)
-    )    
-    
+    .catch(err => res.status(500).send(err))    
 })
 
 router.delete("/:id", async(req, res)=>{
@@ -68,12 +79,10 @@ router.delete("/:id", async(req, res)=>{
     .then((result)=>{
         console.log(result)
         if (result.deletedCount===0)
-            return res.status(409).send(`DELETE Request faild! Race with id ${req.params.id} not found`)
+            return res.status(404).send(`DELETE Request faild! Race with id ${req.params.id} not found`)
         return res.send("Race deleted successfully")
     })
-    .catch((err)=>
-        res.status(409).send(err)
-    )    
+    .catch(err => res.status(500).send(err))    
 })
 
 module.exports = router;

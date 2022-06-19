@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const {CircuitDTO } = require("./DTOs/CircuitDTO")
+const {RaceDTO } = require("./DTOs/RaceDTO")
+const {DriverDTO } = require("./DTOs/DriverDTO")
 var uniqueValidator = require('mongoose-unique-validator');
 
 const driverSchema = new mongoose.Schema({
@@ -17,6 +19,11 @@ const driverSchema = new mongoose.Schema({
     nationality: String,
     url: String
 });
+driverSchema.statics.toDTO = function (modelObject) {
+    return new DriverDTO(modelObject.id,
+        modelObject.url,
+        modelObject.time)
+}
 driverSchema.plugin(uniqueValidator);
 
 const circuitSchema = new mongoose.Schema({
@@ -59,6 +66,9 @@ const raceSchema = new mongoose.Schema({
     time: String,
     url: String
 });
+raceSchema.statics.toDTO = function(modelObject) {
+    return new RaceDTO(modelObject.id, modelObject.year)
+}
 raceSchema.plugin(uniqueValidator);
 
 const Driver = mongoose.model('Driver', driverSchema);
