@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const {CircuitDTO } = require("./DTOs/CircuitDTO")
 var uniqueValidator = require('mongoose-unique-validator');
 
 const driverSchema = new mongoose.Schema({
@@ -33,6 +34,15 @@ const circuitSchema = new mongoose.Schema({
     alt: Number,
     url: String
 });
+
+circuitSchema.statics.toDTO = function(modelObject) {
+    return new CircuitDTO(modelObject.name,
+        modelObject.circuitRef,
+        modelObject.lat,
+        modelObject.lng,
+        modelObject.alt,
+        modelObject.url)
+}
 circuitSchema.plugin(uniqueValidator);
 
 const raceSchema = new mongoose.Schema({

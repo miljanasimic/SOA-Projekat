@@ -7,6 +7,7 @@ const { insertData } = require('./database_helpers/mongodb');
 const { Driver, Circuit, Race } = require('./models');
 const driversRoutes = require("./routes/drivers")
 const racesRoutes = require("./routes/races")
+const circuitsRoutes = require("./routes/circuits")
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use((req, res, next) => methodsMiddleware(req, res, next));
 app.use("/drivers", driversRoutes)
 app.use("/races", racesRoutes)
+app.use("/circutis", circuitsRoutes)
 
 const uri = "mongodb://localhost:27017/f1-data?retryWrites=true&w=majority";
 
