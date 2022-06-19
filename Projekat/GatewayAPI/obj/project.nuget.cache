@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "79ZtlrvotIgHUwUkWDlh5n2brsU5+TePXt0jrFYjpYuEYAkHCHE8TPTm+8wd6oCRqwLgtZWiLYecJOHMa16B+Q==",
+  "dgSpecHash": "0SHmHfibATmNABfd6e5Q4PLDcCDshnJyNC4Q681oUTsJy/ohVdK/wjXXW6YU6JgU7KtZWqHtUTIEv5aoMECxLA==",
   "success": true,
   "projectFilePath": "E:\\Fakultet\\VIII_semestar\\Servisno orijentisane arhitekture\\SOA-Projekat\\Projekat\\GatewayAPI\\GatewayAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Uros\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\Uros\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Uros\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
     "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
     "C:\\Users\\Uros\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",

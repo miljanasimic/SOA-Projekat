@@ -37,6 +37,10 @@ namespace GatewayAPI
 
             //services.AddScoped<ICircuitService, CircuitService>();
             services.AddHttpClient<ICircuitService, CircuitService>()
+                    .ConfigureHttpClient(client =>
+                    {
+                        client.BaseAddress = new Uri("https://api-formula-1.p.rapidapi.com");
+                    })
                     .SetHandlerLifetime(TimeSpan.FromMinutes(5));
         }
 

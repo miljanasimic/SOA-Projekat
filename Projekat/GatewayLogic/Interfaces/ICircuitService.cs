@@ -1,9 +1,11 @@
+using DataLayer.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GatewayLogic.Interfaces
 {
     public interface ICircuitService
     {
-        public Task<string> GetCircuits();
+        public Task<GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>> GetCircuits();
     }
 }
