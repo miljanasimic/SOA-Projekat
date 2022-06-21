@@ -37,7 +37,6 @@ router.post("", async(req, res)=>{
 
     race.save()
     .then(result=>{
-        console.log(result)
         res.send(race)
     })
     .catch(err => res.status(400).send(err.message))
@@ -68,7 +67,6 @@ router.patch("/:id", async(req, res)=> {
 router.delete("/:id", async(req, res)=>{
     Race.deleteOne({raceId: parseInt(req.params.id)})
     .then((result)=>{
-        console.log(result)
         if (result.deletedCount===0)
             return res.status(404).send(`DELETE Request failed! Race with id ${req.params.id} not found`)
         return res.send("Race deleted successfully")
