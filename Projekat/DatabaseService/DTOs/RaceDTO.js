@@ -1,7 +1,9 @@
 class RaceDTO {
-    constructor(id, year) {
-        this.id = id
-        this.year = year
+    constructor(id, url, date, time) {
+        this.id = id;
+        this.url = url;
+        this.date = date;
+        this.time = time;
     }
 }
 

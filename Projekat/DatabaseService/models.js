@@ -69,7 +69,7 @@ const raceSchema = new mongoose.Schema({
     url: String
 });
 raceSchema.statics.toDTO = function(modelObject) {
-    return new RaceDTO(modelObject.id, modelObject.year)
+    return new RaceDTO(modelObject.raceId, modelObject.url, modelObject.date, modelObject.time);
 }
 raceSchema.plugin(uniqueValidator);
 

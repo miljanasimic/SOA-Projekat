@@ -47,4 +47,13 @@
 
         public string Logo { get; set; }
     }
+
+    public class Circuit
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Image { get; set; }
+    }
 }
