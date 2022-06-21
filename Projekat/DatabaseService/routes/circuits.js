@@ -16,7 +16,7 @@ router.get("/:id", (req, res) => {
     Circuit.findOne({circuitId: parseInt(req.params.id)})
     .then(response => {
         if (response)
-            res.send(Circuit.toDTO(response))
+            return res.send(Circuit.toDTO(response))
         return res.status(404).send(`GET Request faild! Circuit with id ${req.params.id} not found`)
     })
     .catch(err=> res.status(404).send(err.message))

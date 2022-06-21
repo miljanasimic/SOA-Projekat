@@ -1,8 +1,10 @@
 class DriverDTO {
-    constructor(id, url, time) {
+    constructor(id, firstname, lastname, url, dob) {
         this.id = id
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.url = url
-        this.time= time
+        this.birthdate = dob
     }
 }
 

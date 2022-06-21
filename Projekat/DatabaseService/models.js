@@ -20,9 +20,11 @@ const driverSchema = new mongoose.Schema({
     url: String
 });
 driverSchema.statics.toDTO = function (modelObject) {
-    return new DriverDTO(modelObject.id,
+    return new DriverDTO(modelObject.driverId,
+        modelObject.forename,
+        modelObject.surname,
         modelObject.url,
-        modelObject.time)
+        modelObject.dob)
 }
 driverSchema.plugin(uniqueValidator);
 

@@ -28,5 +28,19 @@ namespace GatewayAPI.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetCircuitById([FromRoute] int id)
+        {
+            var result = await _circuitService.GetCircuitById(id);
+
+            if (result == null)
+                return NotFound("Doslo je do greske.");
+
+            return Ok(result);
+        }
     }
 }

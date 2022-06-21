@@ -24,4 +24,27 @@
 
         public string Year { get; set; }
     }
+
+    public class Country
+    {
+        public string Name { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    public class TeamStruct
+    {
+        public int Season { get; set; }
+
+        public TeamData Team { get; set; }
+    }
+
+    public class TeamData
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Logo { get; set; }
+    }
 }

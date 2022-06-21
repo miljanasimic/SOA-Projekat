@@ -3,7 +3,11 @@ const router = express.Router();
 const {Driver} = require("../models")
 
 router.get("", async(req, res)=>{
-    Driver.find({}, 'driverId url time')
+    Driver.find({
+        $or : [{ forename : {$regex : req.query.search}}, 
+               { surname : {$regex : req.query.search}},
+               { driverRef : {$regex : req.query.search}}]
+    }, 'driverId forename surname url dob')
     .then(response => {
         const dtoResponse = []
         response.forEach(el=> dtoResponse.push(Driver.toDTO(el)))
@@ -12,12 +16,12 @@ router.get("", async(req, res)=>{
     .catch(err=> res.status(400).send(err.message))    
 })
 
-router.get("/:id", async(req, res)=>{
-    Driver.findOne({raceId: parseInt(req.params.id)}, 'driverId url time')
+router.get("/:code", async(req, res)=>{
+    Driver.findOne({code: req.params.code}, 'driverId forename surname url dob')
     .then(response => {
         if(response)
             return res.send(Driver.toDTO(response))
-        return res.status(404).send(`GET Request faild! Driver with id ${req.params.id} not found`)
+        return res.status(404).send(`GET Request faild! Driver with code ${req.params.code} not found`)
     })
     .catch(err=> res.status(400).send(err.message))    
 })
@@ -30,7 +34,7 @@ router.post("", async(req, res)=>{
     code: req.body.code,
     forename: req.body.forename,
     surname: req.body.surname,
-    dob: req.body.dob,
+    dob: req.body.birthdate,
     nationality: req.body.nationality,
     url: req.body.url
     })
@@ -69,10 +73,11 @@ router.put("/:id", async(req, res)=> {
 })
 
 router.delete("/:id", async(req, res)=>{
+    console.log(req.params);
     Driver.deleteOne({driverId: parseInt(req.params.id)})
     .then(result=>{
         if (result.deletedCount===0)
-            return res.status(404).send(`DELETE Request faild! Driver with id ${req.params.id} not found`)
+            return res.status(404).send(`DELETE Request failed! Driver with id ${req.params.id} not found`)
         return res.send("Driver deleted successfully")
     })
     .catch(err => res.status(500).send(err.message)) 
