@@ -17,11 +17,11 @@ router.get("", async(req, res)=>{
 })
 
 router.get("/:code", async(req, res)=>{
-    Driver.findOne({code: req.params.code}, 'driverId forename surname url dob')
+    Driver.findOne({code: req.params.code.toUpperCase()}, 'driverId forename surname url dob')
     .then(response => {
         if(response)
             return res.send(Driver.toDTO(response))
-        return res.status(404).send(`GET Request faild! Driver with code ${req.params.code} not found`)
+        return res.status(404).send(`GET Request failed! Driver with code ${req.params.code} not found`)
     })
     .catch(err=> res.status(400).send(err.message))    
 })
@@ -46,10 +46,10 @@ router.post("", async(req, res)=>{
 
 router.put("/:id", async(req, res)=> {
     if (!req.params.id)
-        return res.status(400).send(`PUT Request faild! DriverId is missing`)
+        return res.status(400).send(`PUT Request failed! DriverId is missing`)
     const driver = await Driver.findOne({driverId : parseInt(req.params.id)})
     if (!driver) 
-        return res.status(404).send(`PUT Request faild! Driver with id ${req.params.id} not found`)
+        return res.status(404).send(`PUT Request failed! Driver with id ${req.params.id} not found`)
 
     if (req.body.driverRef)
         driver.driverRef = req.body.driverRef
@@ -67,13 +67,12 @@ router.put("/:id", async(req, res)=> {
         driver.url= req.body.url
 
     driver.save()
-    .then(()=> res.send("Driver updated successfully"))
+    .then(()=> res.send(Driver.toDTO(driver)))
     .catch(err=> res.status(500).send(err.message))    
 
 })
 
 router.delete("/:id", async(req, res)=>{
-    console.log(req.params);
     Driver.deleteOne({driverId: parseInt(req.params.id)})
     .then(result=>{
         if (result.deletedCount===0)

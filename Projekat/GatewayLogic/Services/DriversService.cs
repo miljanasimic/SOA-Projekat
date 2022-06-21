@@ -20,7 +20,7 @@ namespace GatewayLogic.Services
             _HttpClientFactory = httpClientFactory;
         }
 
-        public async Task<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>> GetDrivers(string search)
+        public async Task<BaseResponse<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>>> GetDrivers(string search)
         {
             try
             {
@@ -45,35 +45,51 @@ namespace GatewayLogic.Services
 
                 var httpClient  = _HttpClientFactory.CreateClient("ServiceHttpClient");
                 var serviceDtos = new List<DriverReadDTO>();
+                string errorMessage = null;
+
                 using (var response = await httpClient.GetAsync("/drivers?search=" + search))
                 {
+                    var responseContent = await response.Content?.ReadAsStringAsync();
+
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
                         serviceDtos = JsonConvert.DeserializeObject<List<DriverReadDTO>>(responseContent);
                     }
                     else
                     {
                         serviceDtos = null;
+                        errorMessage = responseContent;
                     }
                 }
 
                 if (apiDtos == null && serviceDtos == null)
-                    return null;
+                    return new BaseResponse<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>>
+                    {
+                        ErrorMessage = errorMessage,
+                        IsSuccess = false
+                    };
 
-                return new GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>
+                return new BaseResponse<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>>
                 {
-                    ApiReponse = apiDtos,
-                    ServiceResponse = serviceDtos
+                    ResponseContent = new GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>
+                    {
+                        ApiReponse = apiDtos,
+                        ServiceResponse = serviceDtos
+                    },
+                    IsSuccess = true
                 };
             }
             catch(Exception e)
             {
-                return null;
+                return new BaseResponse<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>>
+                {
+                    ErrorMessage = e.Message,
+                    IsSuccess = false
+                };
             }
         }
 
-        public async Task<GatewayResponse<DriverApiReadDTO, DriverReadDTO>> GetDriverByCode(string code)
+        public async Task<BaseResponse<GatewayResponse<DriverApiReadDTO, DriverReadDTO>>> GetDriverByCode(string code)
         {
             try
             {
@@ -92,31 +108,49 @@ namespace GatewayLogic.Services
                 var httpClient = _HttpClientFactory.CreateClient("ServiceHttpClient");
 
                 DriverReadDTO serviceDriverDTO = null;
+                string errorMessage = null;
                 using(var response = await httpClient.GetAsync("/drivers/" + code))
                 {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
                         serviceDriverDTO = JsonConvert.DeserializeObject<DriverReadDTO>(responseContent);
+                    }
+                    else
+                    {
+                        errorMessage = responseContent;
                     }
                 }
 
                 if (driverApiDto == null && serviceDriverDTO == null)
-                    return null;
+                    return new BaseResponse<GatewayResponse<DriverApiReadDTO, DriverReadDTO>>
+                    {
+                        ErrorMessage = errorMessage,
+                        IsSuccess = false
+                    };
 
-                return new GatewayResponse<DriverApiReadDTO, DriverReadDTO>
+                return new BaseResponse<GatewayResponse<DriverApiReadDTO, DriverReadDTO>>
                 {
-                    ApiReponse = driverApiDto,
-                    ServiceResponse = serviceDriverDTO
+                    ResponseContent = new GatewayResponse<DriverApiReadDTO, DriverReadDTO>
+                    {
+                        ApiReponse = driverApiDto,
+                        ServiceResponse = serviceDriverDTO
+                    },
+                    IsSuccess = true
                 };
             }
             catch(Exception e)
             {
-                return null;
+                return new BaseResponse<GatewayResponse<DriverApiReadDTO, DriverReadDTO>>
+                {
+                    ErrorMessage = e.Message,
+                    IsSuccess = false
+                };
             }
         }
 
-        public async Task<DriverWriteDTO> AddDriver(DriverWriteDTO driver)
+        public async Task<BaseResponse<DriverWriteDTO>> AddDriver(DriverWriteDTO driver)
         {
             try
             {
@@ -125,21 +159,33 @@ namespace GatewayLogic.Services
 
                 using(var response = await httpClient.PostAsync("/drivers", content))
                 {
-                    if(response.StatusCode == HttpStatusCode.OK)
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        return driver;
+                        return new BaseResponse<DriverWriteDTO>
+                        {
+                            ResponseContent = driver,
+                            IsSuccess = true
+                        };
                     }
 
-                    return null;
+                    return new BaseResponse<DriverWriteDTO>
+                    {
+                        ErrorMessage = await response.Content?.ReadAsStringAsync(),
+                        IsSuccess = false
+                    };
                 }
             }
             catch(Exception e)
             {
-                return null;
+                return new BaseResponse<DriverWriteDTO>
+                {
+                    ErrorMessage = e.Message,
+                    IsSuccess = false
+                };
             }
         }
 
-        public async Task<bool> DeleteDriver(int driverId)
+        public async Task<BaseResponse<string>> DeleteDriver(int driverId)
         {
             try
             {
@@ -147,12 +193,66 @@ namespace GatewayLogic.Services
 
                 using(var response = await httpClient.DeleteAsync("/drivers/" + driverId))
                 {
-                    return response.IsSuccessStatusCode;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new BaseResponse<string>
+                        {
+                            ErrorMessage = await response.Content?.ReadAsStringAsync(),
+                            IsSuccess = false
+                        };
+                    }
+
+                    return new BaseResponse<string>
+                    {
+                        IsSuccess = true,
+                        ResponseContent = await response.Content?.ReadAsStringAsync()
+                    };
+
                 }
             }
             catch(Exception e)
             {
-                return false;
+                return new BaseResponse<string>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message
+                };
+            }
+        }
+
+        public async Task<BaseResponse<DriverReadDTO>> EditDriver(int driverId, DriverEditDTO newDriverData)
+        {
+            try
+            {
+                var httpClient = _HttpClientFactory.CreateClient("ServiceHttpClient");
+                var content = JsonContent.Create<DriverEditDTO>(newDriverData);
+
+                using (var response = await httpClient.PutAsync("/drivers/" + driverId, content))
+                {
+                    var responseContent = await response.Content?.ReadAsStringAsync();
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return new BaseResponse<DriverReadDTO>
+                        {
+                            ResponseContent = JsonConvert.DeserializeObject<DriverReadDTO>(responseContent),
+                            IsSuccess = true
+                        };
+                    }
+
+                    return new BaseResponse<DriverReadDTO>
+                    {
+                        ErrorMessage = responseContent,
+                        IsSuccess = false
+                    };
+                }
+            }
+            catch(Exception e)
+            {
+                return new BaseResponse<DriverReadDTO>
+                {
+                    ErrorMessage = e.Message,
+                    IsSuccess = false
+                };
             }
         }
     }

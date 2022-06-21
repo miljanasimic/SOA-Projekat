@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using GatewayLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace GatewayAPI.Controllers
 {
@@ -19,28 +20,50 @@ namespace GatewayAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCircuits()
         {
-            var result = await _circuitService.GetCircuits();
+            try
+            {
+                var result = await _circuitService.GetCircuits();
 
-            if (result == null)
-                return NotFound("Doslo je do greske.");
+                if (result == null)
+                    return StatusCode(500, "An error occured.");
 
-            return Ok(result);
+                if (result.ErrorMessage != null)
+                    return NotFound(result.ErrorMessage);
+
+                return Ok(result.ResponseContent);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, "An error occured.");
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCircuitById([FromRoute] int id)
         {
-            var result = await _circuitService.GetCircuitById(id);
+            try
+            {
+                var result = await _circuitService.GetCircuitById(id);
 
-            if (result == null)
-                return NotFound("Doslo je do greske.");
+                if (result == null)
+                    return NotFound("An error occured.");
 
-            return Ok(result);
+                if (result.ErrorMessage != null)
+                    return NotFound(result.ErrorMessage);
+
+                return Ok(result.ResponseContent);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, "An error occured.");
+            }
         }
     }
 }

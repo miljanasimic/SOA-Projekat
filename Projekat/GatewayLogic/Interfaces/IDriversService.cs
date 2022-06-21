@@ -6,12 +6,14 @@ namespace GatewayLogic.Interfaces
 {
     public interface IDriversService
     {
-        public Task<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>> GetDrivers(string search);
+        public Task<BaseResponse<GatewayResponse<List<DriverApiReadDTO>, List<DriverReadDTO>>>> GetDrivers(string search);
 
-        public Task<GatewayResponse<DriverApiReadDTO, DriverReadDTO>> GetDriverByCode(string code);
+        public Task<BaseResponse<GatewayResponse<DriverApiReadDTO, DriverReadDTO>>> GetDriverByCode(string code);
 
-        public Task<DriverWriteDTO> AddDriver(DriverWriteDTO driver);
+        public Task<BaseResponse<DriverWriteDTO>> AddDriver(DriverWriteDTO driver);
 
-        public Task<bool> DeleteDriver(int driverId);
+        public Task<BaseResponse<string>> DeleteDriver(int driverId);
+
+        public Task<BaseResponse<DriverReadDTO>> EditDriver(int driverId, DriverEditDTO newDriverData);
     }
 }

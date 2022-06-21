@@ -21,7 +21,7 @@ namespace GatewayLogic.Services
 
         #region Public Methods
 
-        public async Task<GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>> GetCircuits()
+        public async Task<BaseResponse<GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>>> GetCircuits()
         {
             try
             {
@@ -46,35 +46,49 @@ namespace GatewayLogic.Services
 
                 var httpClient = _HttpClientFactory.CreateClient("ServiceHttpClient");
                 var serviceDtos = new List<CircuitsReadDTO>();
+                string errorMessage = null;
                 using (var response = await httpClient.GetAsync("/circuits"))
                 {
+                    var responseContent = await response.Content?.ReadAsStringAsync();
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
                         serviceDtos = JsonConvert.DeserializeObject<List<CircuitsReadDTO>>(responseContent);
                     }
                     else
                     {
                         serviceDtos = null;
+                        errorMessage = responseContent;
                     }
                 }
 
                 if (apiDtos == null && serviceDtos == null)
-                    return null;
+                    return new BaseResponse<GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = errorMessage
+                    };
 
-                return new GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>
+                return new BaseResponse<GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>>
                 {
-                    ApiReponse = apiDtos,
-                    ServiceResponse = serviceDtos
+                    ResponseContent = new GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>
+                    {
+                        ApiReponse = apiDtos,
+                        ServiceResponse = serviceDtos
+                    },
+                    IsSuccess = true
                 };
             }
             catch (Exception e)
             {
-                return null;
+                return new BaseResponse<GatewayResponse<List<CircuitsApiReadDTO>, List<CircuitsReadDTO>>>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message
+                };
             }
         }
 
-        public async Task<GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>> GetCircuitById(int id)
+        public async Task<BaseResponse<GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>>> GetCircuitById(int id)
         {
             try
             {
@@ -93,41 +107,45 @@ namespace GatewayLogic.Services
                 var httpClient = _HttpClientFactory.CreateClient("ServiceHttpClient");
 
                 CircuitsReadDTO circuitServiceDTO = null;
+                string errorMessage = null;
                 using (var response = await httpClient.GetAsync("/circuits/" + id))
                 {
+                    var responseContent = await response.Content?.ReadAsStringAsync();
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
                         circuitServiceDTO = JsonConvert.DeserializeObject<CircuitsReadDTO>(responseContent);
+                    }
+                    else
+                    {
+                        errorMessage = responseContent;
                     }
                 }
 
                 if (circuitApiDto == null && circuitServiceDTO == null)
-                    return null;
+                    return new BaseResponse<GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = errorMessage
+                    };
 
-                return new GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>
+                return new BaseResponse<GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>>
                 {
-                    ApiReponse = circuitApiDto,
-                    ServiceResponse = circuitServiceDTO
+                    ResponseContent = new GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>
+                    {
+                        ApiReponse = circuitApiDto,
+                        ServiceResponse = circuitServiceDTO
+                    },
+                    IsSuccess = true
                 };
             }
             catch (Exception e)
             {
-                return null;
+                return new BaseResponse<GatewayResponse<CircuitsApiReadDTO, CircuitsReadDTO>>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message
+                };
             }
-        }
-
-        public async Task<object> AddCircuit(CircuitWriteDTO circuitDto)
-        {
-            return null;
-            //try
-            //{
-
-            //}
-            //catch(Exception e)
-            //{
-
-            //}
         }
 
         #endregion

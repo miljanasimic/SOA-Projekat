@@ -5,5 +5,6 @@
         public T ApiReponse { get; set; }
 
         public V ServiceResponse { get; set; }
+
     }
 }
