@@ -1,0 +1,13 @@
+services:
+  f1database:
+    image: mongo
+    ports:
+      - "27017:27017"
+  databaseservice:
+    build: ./DatabaseService
+    ports:
+      - "3000:3000"
+  gatewayapi:
+    build: .
+    ports:
+      - "5000:80"

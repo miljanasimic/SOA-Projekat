@@ -46,7 +46,7 @@ namespace GatewayAPI
 
             services.AddHttpClient("ServiceHttpClient", client =>
             {
-                client.BaseAddress = new Uri("http://localhost:3000");
+                client.BaseAddress = new Uri("http://databaseservice:3000");
             }).SetHandlerLifetime(TimeSpan.FromMinutes(5));
         }
 
@@ -56,9 +56,12 @@ namespace GatewayAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GatewayAPI v1"));
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GatewayAPI v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GatewayAPI v1"));
 
             app.UseHttpsRedirection();
 

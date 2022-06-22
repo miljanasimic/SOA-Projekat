@@ -19,7 +19,7 @@ app.use("/drivers", driversRoutes)
 app.use("/races", racesRoutes)
 app.use("/circuits", circuitsRoutes)
 
-const uri = "mongodb://localhost:27017/f1-data?retryWrites=true&w=majority";
+const uri = "mongodb://f1database:27017/f1-data?retryWrites=true&w=majority";
 
 mongoose.connect(uri).then(() => {
     console.log('Connection to database successfull.')
