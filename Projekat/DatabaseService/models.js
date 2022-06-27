@@ -73,8 +73,25 @@ raceSchema.statics.toDTO = function(modelObject) {
 }
 raceSchema.plugin(uniqueValidator);
 
+const lapSchema = new mongoose.Schema({
+    raceId: {
+        type: Number,
+        required: true
+    },
+    driverId: {
+        type: Number,
+        required: true
+    },
+    lap: Number,
+    position: Number,
+    time: Number,
+    milliseconds: Number
+});
+
+
 const Driver = mongoose.model('Driver', driverSchema);
 const Circuit = mongoose.model('Circuit', circuitSchema);
 const Race = mongoose.model('Race', raceSchema);
+const Lap = mongoose.model('Lap', lapSchema);
 
-module.exports = { Driver : Driver, Circuit : Circuit, Race : Race };
+module.exports = { Driver : Driver, Circuit : Circuit, Race : Race, Lap : Lap };

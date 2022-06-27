@@ -8,6 +8,7 @@ const { Driver, Circuit, Race } = require('./models');
 const driversRoutes = require("./routes/drivers")
 const racesRoutes = require("./routes/races")
 const circuitsRoutes = require("./routes/circuits");
+const lapsRoutes = require("./routes/laps");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use((req, res, next) => methodsMiddleware(req, res, next));
 app.use("/drivers", driversRoutes)
 app.use("/races", racesRoutes)
 app.use("/circuits", circuitsRoutes)
+app.use("/laps", lapsRoutes)
 
 const uri = "mongodb://f1database:27017/f1-data?retryWrites=true&w=majority";
 
