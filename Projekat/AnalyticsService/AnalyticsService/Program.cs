@@ -18,7 +18,7 @@ namespace AnalyticsService
         {
             var host = CreateHostBuilder(args).Build();
 
-            await MqttHelper.SubscribeToTopic("mqtt", 1883, "driver-requests");
+            await MqttHelper.SubscribeToTopic("mqtt", 1883, "lap-data");
 
             host.Run();
         }

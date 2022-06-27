@@ -37,6 +37,7 @@ namespace GatewayAPI
             services.AddScoped<ICircuitService, CircuitService>();
             services.AddScoped<IDriversService, DriversService>();
             services.AddScoped<IRacesService, RacesService>();
+            services.AddScoped<ILapService, LapService>();
 
             services.AddHttpClient("ApiHttpClient", client =>
             {

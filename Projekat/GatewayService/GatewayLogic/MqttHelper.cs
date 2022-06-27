@@ -8,7 +8,7 @@ namespace GatewayLogic
 {
     public static class MqttHelper
     {
-        public static async Task PublishToTopic(string server, int port, string topic)
+        public static async Task PublishToTopic(string server, int port, string topic, string payload)
         {
             var mqttFactory = new MqttFactory();
             using (var mqttClient = mqttFactory.CreateMqttClient())
@@ -30,7 +30,7 @@ namespace GatewayLogic
 
                 var applicationMessage = new MqttApplicationMessageBuilder()
                     .WithTopic(topic)
-                    .WithPayload("19.5")
+                    .WithPayload(payload)
                     .Build();
 
                 await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
