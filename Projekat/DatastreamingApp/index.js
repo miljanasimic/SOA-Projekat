@@ -2,22 +2,25 @@ const fs = require('fs');
 const { parse } = require('csv-parse');
 const axios = require('axios').default;
 
-function readData() {
+function readData(firstLine, lastLine) {
     fs.createReadStream('./lapTimes.csv', { encoding : 'utf-8' })
-        .pipe(parse({ delimiter : ',', from_line: 1, columns: true }))
-        .on('data', chunk=> {
-            setInterval(() => {
-                axios.post('http://gatewayapi:5000/laps', chunk)
-                .then(function (response) {
-                    console.log(response);
-                  })
-                .catch(function (error) {
-                console.log(error);
-                });
-            }, 1000);
+        .pipe(parse({ delimiter : ',', from_line: firstLine, to_line:lastLine, columns: true }))
+        .on('data', (chunk) => {
+            axios.post('http://localhost:5000/LapTimes', chunk)
+            .then(function (response) {
+              })
+              .catch(function (error) {
+                console.log(error.code);
+              });
         });
 }
 
-readData();
-
-
+const maxLine=400000;
+const offset=3;
+let firstLine=1;
+let lastLine=3;
+setInterval(() => {
+    readData(firstLine,lastLine);
+    firstLine+=offset
+    lastLine=lastLine+offset< maxLine ? lastLine+offset : maxLine
+}, 300);
