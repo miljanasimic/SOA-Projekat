@@ -1,6 +1,8 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
+using Newtonsoft.Json;
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,7 +35,7 @@ namespace AnalyticsService
         private static async Task onMessageReceived(MqttApplicationMessageReceivedEventArgs e)
         {
             Console.WriteLine("Received message");
-            Console.WriteLine(e);
+            var message = JsonConvert.DeserializeObject<LapMessage>(Encoding.Default.GetString(e.ApplicationMessage.Payload));
         }
     }
 }
