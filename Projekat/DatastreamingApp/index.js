@@ -3,36 +3,29 @@ const { parse } = require('csv-parse');
 const axios = require('axios').default;
 
 function readData(firstLine, lastLine) {
-  let records = [];
     fs.createReadStream('./lapTimes.csv', { encoding : 'utf-8' })
-        .pipe(parse({ delimiter : ',', from_line: 1, columns: true }))
+        .pipe(parse({ delimiter : ',', from_line: firstLine, to_line:lastLine, 
+        columns: ["raceId","driverId","lap","position","time","milliseconds"]}))
         .on('data', (chunk) => {
-            records.push(chunk);
-            if(records.length > 50){
-              sendRequests(records.slice())
-            }
-        });
-}
-
-async function sendRequests(records){
-  records.forEach(async (chunk)=>{
-    setInterval(async () => {
-      axios.post('http://localhost:5000/LapTimes', chunk)
-            .then(function (response) {
-              })
+            axios.post('http://localhost:5000/LapTimes', chunk)
               .catch(function (error) {
                 console.log(error.code);
               });
-    }, 5000);
-  });
+        });
 }
 
+function main(offset, maxline){
+  let firstLine=2;
+  let lastLine=firstLine+offset;
+  setInterval(() => {
+      readData(firstLine,lastLine);    
+      firstLine+=offset+1
+      lastLine=lastLine+offset+1< maxline ? lastLine+offset+1 : maxline      
+  }, 300);
+}
+
+
 const maxLine=400000;
-const offset=3;
-let firstLine=1;
-let lastLine=3;
-setInterval(() => {
-    readData(firstLine,lastLine);
-    firstLine+=offset
-    lastLine=lastLine+offset< maxLine ? lastLine+offset : maxLine
-}, 300);
+const offset=5;
+main(offset, maxLine);
+
