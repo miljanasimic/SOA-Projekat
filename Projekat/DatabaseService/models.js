@@ -84,7 +84,7 @@ const lapSchema = new mongoose.Schema({
     },
     lap: Number,
     position: Number,
-    time: Number,
+    time: String,
     milliseconds: Number
 });
 

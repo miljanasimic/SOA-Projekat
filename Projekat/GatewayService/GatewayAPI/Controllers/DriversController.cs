@@ -28,8 +28,6 @@ namespace GatewayAPI.Controllers
         {
             try
             {
-                await MqttHelper.PublishToTopic("mqtt", 1883, "driver-requests");
-
                 if (name == null || name.Length < 3)
                 {
                     return BadRequest("Search string needs to have atleast 3 letters.");

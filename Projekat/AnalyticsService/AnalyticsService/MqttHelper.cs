@@ -8,35 +8,6 @@ namespace AnalyticsService
 {
     public class MqttHelper
     {
-        public static async Task PublishToTopic(string server, int port, string topic)
-        {
-            var mqttFactory = new MqttFactory();
-            using (var mqttClient = mqttFactory.CreateMqttClient())
-            {
-                var mqttClientOptions = new MqttClientOptionsBuilder()
-                    .WithTcpServer(server, port)
-                    .Build();
-
-                mqttClient.ConnectedAsync += async (e) =>
-                {
-                    Console.WriteLine("Connected.");
-                };
-                mqttClient.DisconnectedAsync += async (e) =>
-                {
-                    Console.WriteLine("Disconnected.");
-                };
-
-                await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-
-                var applicationMessage = new MqttApplicationMessageBuilder()
-                    .WithTopic(topic)
-                    .WithPayload("19.5")
-                    .Build();
-
-                await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
-            }
-        }
-
         public static async Task SubscribeToTopic(string server, int port, string topic)
         {
             var mqttFactory = new MqttFactory();
@@ -62,6 +33,7 @@ namespace AnalyticsService
         private static async Task onMessageReceived(MqttApplicationMessageReceivedEventArgs e)
         {
             Console.WriteLine("Received message");
+            Console.WriteLine(e);
         }
     }
 }
