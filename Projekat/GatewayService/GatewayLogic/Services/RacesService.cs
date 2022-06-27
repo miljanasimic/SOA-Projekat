@@ -1,11 +1,14 @@
 ﻿using DataLayer.DTOs;
 using DataLayer.Models;
 using GatewayLogic.Interfaces;
+using MQTTnet;
+using MQTTnet.Client;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GatewayLogic.Services

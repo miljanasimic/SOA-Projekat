@@ -9,5 +9,29 @@ services:
       - "3000:3000"
   gatewayapi:
     build: ./GatewayService
+    restart: always
     ports:
       - "5000:80"
+  analytics:
+    build: ./AnalyticsService
+    restart: always
+    ports:
+      - "5003:80"
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    restart: always
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+  influx:
+    container_name: influx
+    image: influxdb
+    volumes:
+      - ./influx/data:/var/lib/influxdb
+    ports:
+      - "8086:8086"

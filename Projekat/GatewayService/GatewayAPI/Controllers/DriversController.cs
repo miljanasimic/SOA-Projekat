@@ -1,4 +1,5 @@
 ﻿using DataLayer.DTOs;
+using GatewayLogic;
 using GatewayLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,8 @@ namespace GatewayAPI.Controllers
         {
             try
             {
+                await MqttHelper.PublishToTopic("mqtt", 1883, "driver-requests");
+
                 if (name == null || name.Length < 3)
                 {
                     return BadRequest("Search string needs to have atleast 3 letters.");
