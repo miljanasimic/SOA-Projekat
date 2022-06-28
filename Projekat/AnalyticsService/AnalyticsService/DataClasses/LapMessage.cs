@@ -1,4 +1,4 @@
-﻿namespace AnalyticsService
+﻿namespace AnalyticsService.DataClasses
 {
     public class LapMessage
     {

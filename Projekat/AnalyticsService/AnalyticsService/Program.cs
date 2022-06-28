@@ -1,13 +1,10 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MQTTnet;
-using MQTTnet.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AnalyticsService
@@ -18,7 +15,16 @@ namespace AnalyticsService
         {
             var host = CreateHostBuilder(args).Build();
 
-            await MqttHelper.SubscribeToTopic("mqtt", 1883, "lap-data");
+            var httpClientFactory = host.Services.GetRequiredService<IHttpClientFactory>();
+
+            using(var httpClient = httpClientFactory.CreateClient("EkuiperHttpClient"))
+            {
+                await EkuiperWrapper.ConfigureStream(httpClient);
+                await EkuiperWrapper.ConfigureQuery(httpClient);
+            }
+
+            await MqttHelper.SubscribeToTopic("mqtt", 1883, "lap-data", MqttHelper.onGatewayMessageReceived);
+            await MqttHelper.SubscribeToTopic("mqtt", 1883, "ekuiper-output", MqttHelper.onEkuiperMessageReceived);
 
             host.Run();
         }
