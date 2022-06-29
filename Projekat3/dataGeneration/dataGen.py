@@ -27,7 +27,7 @@ def generateSensorData(pos):
 
 if __name__ == "__main__":
     pos = 0
-    time.sleep(5)
+    time.sleep(2)
     while(pos < len(pressure)):
 
         (pressureVal, temperatureVal, humidityVal) = generateSensorData(pos)

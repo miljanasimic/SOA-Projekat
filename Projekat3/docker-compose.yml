@@ -47,7 +47,7 @@ volumes:
   log-data:
   consul-config:
   consul-data:
-  portainer_data:
+  #portainer_data:
 
 services:
   consul:
@@ -387,24 +387,24 @@ services:
 #    depends_on:
 #      - data
 #      - command
-  portainer:
-      image:  portainer/portainer
-      ports:
-        - "0.0.0.0:9000:9000"
-      command: -H unix:///var/run/docker.sock
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - portainer_data:/data
+  # portainer:
+  #     image:  portainer/portainer
+  #     ports:
+  #       - "0.0.0.0:9000:9000"
+  #     command: -H unix:///var/run/docker.sock
+  #     volumes:
+  #       - /var/run/docker.sock:/var/run/docker.sock
+  #       - portainer_data:/data
 
-  ui:
-      container_name: edgex-ui-go
-      hostname: edgex-ui-go
-      image: nexus3.edgexfoundry.org:10004/docker-edgex-ui-go:master
-      networks:
-        - edgex-network
-      ports:
-        - "0.0.0.0:4000:4000/tcp"
-      read_only: true
+  # ui:
+  #     container_name: edgex-ui-go
+  #     hostname: edgex-ui-go
+  #     image: nexus3.edgexfoundry.org:10004/docker-edgex-ui-go:master
+  #     networks:
+  #       - edgex-network
+  #     ports:
+  #       - "0.0.0.0:4000:4000/tcp"
+  #     read_only: true
   
   visualization:
     container_name: visualization
@@ -417,7 +417,7 @@ services:
       - edgex-network
   
   edgex-mqtt:
-    container_name: edgex_mqtt
+    container_name: edgex-mqtt
     hostname: edgex-mqtt
     image: eclipse-mosquitto
     restart: always
@@ -428,6 +428,16 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
+    networks:
+      - edgex-network
+  
+  monitoring:
+    container_name: monitoring
+    build: ./MonitoringService
+    ports:
+      - "3000:3000"
+    depends_on:
+      - edgex-mqtt
     networks:
       - edgex-network
 

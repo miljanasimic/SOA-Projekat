@@ -1,9 +1,12 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using VisualizationService.DataClasses;
 
 namespace VisualizationService
 {
@@ -33,9 +36,21 @@ namespace VisualizationService
 
         public static async Task onEdgexDataReceived(MqttApplicationMessageReceivedEventArgs e)
         {
-            Console.WriteLine("Received results from EdgeX...");
-            var payloadAsString = Encoding.Default.GetString(e.ApplicationMessage.Payload);
-            Console.WriteLine(payloadAsString);
+            try
+            {
+                Console.WriteLine("Received results from EdgeX...");
+                var payloadAsString = Encoding.Default.GetString(e.ApplicationMessage.Payload);
+                var edgexMessage = JsonConvert.DeserializeObject<DeviceReadingModel>(payloadAsString);
+
+                foreach (var reading in edgexMessage.Readings)
+                {
+                    Console.WriteLine(JsonConvert.SerializeObject(reading));
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

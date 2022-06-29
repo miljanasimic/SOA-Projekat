@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="MQTTnet.AspNetCore" Version="4.0.1.184" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>
