@@ -8,7 +8,7 @@ namespace AnalyticsService
 {
     public static class EkuiperWrapper
     {
-        private static int MILLISECONDS = 95000;
+        public static int MILLISECONDS = 115000;
         public async static Task ConfigureStream(HttpClient httpClient)
         {
             try
@@ -35,7 +35,7 @@ namespace AnalyticsService
                 var actions = new List<object>();
                 actions.Add(new { mqtt = new { server = "tcp://mqtt:1883", topic = "ekuiper-output" } });
 
-                var rule = "select * from mqtt_input where milliseconds > " + MILLISECONDS;
+                var rule = "select * from mqtt_input where milliseconds < " + MILLISECONDS;
                 var content = JsonContent.Create<object>(new { id = "rule", sql = rule, actions = actions });
                 using (var response = await httpClient.PostAsync("/rules", content))
                 {

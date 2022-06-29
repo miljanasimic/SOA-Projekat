@@ -82,7 +82,7 @@ namespace AnalyticsService
             {
                 InfluxDBWritter.WriteToInflux(message);
 
-                if(message.Milliseconds < 96000)
+                if(message.Milliseconds < EkuiperWrapper.MILLISECONDS)
                 {
                     var notificationMessage = new MessageRequest
                     {
@@ -90,6 +90,7 @@ namespace AnalyticsService
                         Time = message.Time,
                         Milliseconds = message.Milliseconds
                     };
+                    EkuiperWrapper.MILLISECONDS = message.Milliseconds;
                     GrpcMethods.NotifyService(notificationMessage);
                 }
             }
