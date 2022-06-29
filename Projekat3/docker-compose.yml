@@ -234,42 +234,42 @@ services:
       - data
 
 
-  # app-service-mqtt:
-  #     image: edgexfoundry/docker-app-service-configurable:1.1.0
-  #     ports:
-  #       - "0.0.0.0:48101:48101"
-  #     container_name: edgex-app-service-configurable-mqtt
-  #     hostname: edgex-app-service-configurable-mqtt
-  #     networks:
-  #       edgex-network:
-  #         aliases:
-  #           - edgex-app-service-configurable-mqtt
-  #     environment:
-  #       <<: *common-variables
-  #       edgex_profile: mqtt-export
-  #       Service_Host: edgex-app-service-configurable-mqtt
-  #       Service_Port: 48101
-  #       MessageBus_SubscribeHost_Host: edgex-core-data
-  #       Binding_PublishTopic: events
-  #       # Added for MQTT export using app service
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_ADDRESS: broker.hivemq.com
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PORT: 1883
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PROTOCOL: tcp
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_TOPIC: YOUR-UNIQUE-TOPIC
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_AUTORECONNECT: "true"
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_RETAIN: "true"
-  #       WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_PERSISTONERROR: "false"
-  #       # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PUBLISHER: 
-  #       # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_USER: 
-  #       # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PASSWORD:
-  #       # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_QOS: ["your quality or service"]
-  #       # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_KEY: [your Key]  
-  #       # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_CERT: [your Certificate]
+  app-service-mqtt:
+      image: edgexfoundry/docker-app-service-configurable:1.1.0
+      ports:
+        - "0.0.0.0:48101:48101"
+      container_name: edgex-app-service-configurable-mqtt
+      hostname: edgex-app-service-configurable-mqtt
+      networks:
+        edgex-network:
+          aliases:
+            - edgex-app-service-configurable-mqtt
+      environment:
+        <<: *common-variables
+        edgex_profile: mqtt-export
+        Service_Host: edgex-app-service-configurable-mqtt
+        Service_Port: 48101
+        MessageBus_SubscribeHost_Host: edgex-core-data
+        Binding_PublishTopic: events
+        # Added for MQTT export using app service
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_ADDRESS: edgex-mqtt
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PORT: 1883
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PROTOCOL: tcp
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_TOPIC: "edgex-data"
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_AUTORECONNECT: "true"
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_RETAIN: "true"
+        WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_PERSISTONERROR: "false"
+        # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PUBLISHER: 
+        # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_USER: 
+        # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_ADDRESSABLE_PASSWORD:
+        # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_QOS: ["your quality or service"]
+        # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_KEY: [your Key]  
+        # WRITABLE_PIPELINE_FUNCTIONS_MQTTSEND_PARAMETERS_CERT: [your Certificate]
 
-  #     depends_on:
-  #       - consul
-  # #      - logging  # uncomment if re-enabled remote logging
-  #       - data
+      depends_on:
+        - consul
+  #      - logging  # uncomment if re-enabled remote logging
+        - data
 
 
 
@@ -405,6 +405,32 @@ services:
       ports:
         - "0.0.0.0:4000:4000/tcp"
       read_only: true
+  
+  visualization:
+    container_name: visualization
+    build: ./VisualizationService
+    ports:
+      - "5004:80"
+    depends_on:
+      - edgex-mqtt
+    networks:
+      - edgex-network
+  
+  edgex-mqtt:
+    container_name: edgex_mqtt
+    hostname: edgex-mqtt
+    image: eclipse-mosquitto
+    restart: always
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      - edgex-network
+
 
   # ui:
   #   container_name: edgex-ui-go
