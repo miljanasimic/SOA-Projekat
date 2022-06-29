@@ -26,6 +26,7 @@ services:
       - "mqtt"
       - "ekuiper"
       - "influx"
+      - "notificationservice"
   mqtt:
     container_name: mqtt
     image: eclipse-mosquitto
@@ -58,3 +59,8 @@ services:
       - "9081:9081"
     environment:
       - MQTT_SOURCE__DEFAULT__SERVER=tcp://mqtt:1883
+  notificationservice:
+    container_name: notificationservice
+    build: ./NotificationService
+    ports:
+      - "50051:50051"

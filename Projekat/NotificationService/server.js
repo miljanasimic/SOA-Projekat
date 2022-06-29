@@ -14,8 +14,8 @@ var packageDefinition = protoLoader.loadSync(
 var notificationservice = grpc.loadPackageDefinition(packageDefinition).notificationservice;
 
 function notify(call, callback) {
-    console.log(`Cao, ${call.request.name}`)
-    callback(null,{replyText: `Cao, ${call.request.name}`} )
+    console.log(`New best time! Time of ${call.request.milliseconds / 1000} seconds was set by driver with ID ${call.request.driverId}`)
+    callback(null, null)
 }
 
 /**

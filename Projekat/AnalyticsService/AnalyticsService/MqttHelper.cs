@@ -1,4 +1,5 @@
 ﻿using AnalyticsService.DataClasses;
+using GrpcClient;
 using MQTTnet;
 using MQTTnet.Client;
 using Newtonsoft.Json;
@@ -80,6 +81,17 @@ namespace AnalyticsService
             foreach(var message in messages)
             {
                 InfluxDBWritter.WriteToInflux(message);
+
+                if(message.Milliseconds < 96000)
+                {
+                    var notificationMessage = new MessageRequest
+                    {
+                        DriverId = message.DriverId,
+                        Time = message.Time,
+                        Milliseconds = message.Milliseconds
+                    };
+                    GrpcMethods.NotifyService(notificationMessage);
+                }
             }
         }
     }

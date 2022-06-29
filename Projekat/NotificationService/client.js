@@ -15,11 +15,9 @@ var notificationservice = grpc.loadPackageDefinition(packageDefinition).notifica
 
 function main() {
     var client = new notificationservice.NotificationService('localhost:50051', grpc.credentials.createInsecure());
-    client.notify({name: "Miljana"}, function(err, reply) {
+    client.notify({driverId: 1, milliseconds : 1500}, function(err, reply) {
         if (err) {
           console.log(err)
-        } else {
-          console.log(reply.replyText)
         }
       });
 }

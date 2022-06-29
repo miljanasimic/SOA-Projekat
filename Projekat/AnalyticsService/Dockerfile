@@ -3,10 +3,12 @@ WORKDIR /app
 
 COPY *.sln .
 COPY AnalyticsService/*.csproj ./AnalyticsService/
+COPY GrpcClient/*.csproj ./GrpcClient/
 
 RUN dotnet restore
 
 COPY AnalyticsService/. ./AnalyticsService/
+COPY GrpcClient/. ./GrpcClient/
 
 WORKDIR /app/AnalyticsService
 RUN dotnet publish -c Release -o out
