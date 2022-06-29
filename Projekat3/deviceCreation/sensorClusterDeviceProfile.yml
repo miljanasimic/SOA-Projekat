@@ -1,0 +1,47 @@
+name: "SensorCluster"
+manufacturer: "Raspberry Pi Foundation"
+model: "Raspberry Pi 3b+"
+labels:
+  - "rpi"
+description: "Sensor cluster providing metrics for pressure, temperature and humidity"
+
+deviceResources:
+  - name: pressure
+    description: "Sensor cluster pressure values"
+    properties:
+      value:
+        {
+          type: "float64",
+          readWrite: "RW",
+          minimum: "0",
+          maximum: "165000",
+          size: "4",
+          LSB: "true",
+          defaultValue: "0",
+        }
+  - name: temperature
+    description: "Sensor cluster temperature values"
+    properties:
+      value:
+        {
+          type: "float64",
+          readWrite: "RW",
+          minimum: "-150",
+          maximum: "100",
+          size: "4",
+          LSB: "true",
+          defaultValue: "0",
+        }
+  - name: humidity
+    description: "Sensor cluster humidity values"
+    properties:
+      value:
+        {
+          type: "float64",
+          readWrite: "RW",
+          minimum: "0",
+          maximum: "100",
+          size: "4",
+          LSB: "true",
+          defaultValue: "0",
+        }
