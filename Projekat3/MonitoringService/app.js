@@ -3,9 +3,7 @@ const mqtt = require('mqtt');
 
 
 const methodsMiddleware = require('./middlewares/methods');
-const {limitsRoutes, getHumidityLimit, getPressureLimit, getTemperatureLimit,
-    getTemperatureAboveLimit, getHumidityAboveLimit, getPressureAboveLimit,
-    incrTemperatureAboveLimit, incrHumidityAboveLimit, incrPressureAboveLimit} = require('./routes/limits');
+const {limitsRoutes, limitInstance} = require('./routes/limits');
 const convertToFloat = require('./converter');
 const sendCommand = require('./command');
 
@@ -36,26 +34,52 @@ client.on('message', (topic, payload) => {
     const patameterValue = convertToFloat(readings[0].value)
   
     console.log('Received Message:',parameterName,patameterValue)
-    console.log('Temp limit: ', getTemperatureLimit())
-    console.log('Hum limit: ', getHumidityLimit())
-    console.log('Pres limit: ', getPressureLimit())
+    console.log('Temp limit: ', limitInstance.getTemperatureLimit(), 'Hum limit: ', limitInstance.getHumidityLimit(),'Pres limit: ', limitInstance.getPressureLimit())
+    let newColor = null;
     switch(parameterName){
         case 'temperature':
-            if (patameterValue>getTemperatureLimit()){
-                incrTemperatureAboveLimit()
-                
+            if (patameterValue>limitInstance.getTemperatureLimit()){
+                limitInstance.incrTemperatureAboveLimit()
+                console.log(patameterValue, limitInstance.getTemperatureAboveLimit())
+                if(limitInstance.getTemperatureAboveLimit()===5)
+                    newColor='red'
+                else if(limitInstance.getTemperatureAboveLimit()===3)
+                    newColor='orange'                  
+            } else if(limitInstance.getTemperatureAboveLimit()>0){
+                limitInstance.clearTemperatureAboveLimit();
+                newColor='green'
             }
+            break;
         case 'humidity':
-        if (patameterValue>getHumidityLimit()){
-            incrHumidityAboveLimit()
-            
-        }
+            if (patameterValue>limitInstance.getHumidityLimit()){
+                limitInstance.incrHumidityAboveLimit()
+                console.log(patameterValue, limitInstance.getHumidityAboveLimit())
+                if(limitInstance.getHumidityAboveLimit()===5)
+                    newColor='red'
+                else if(limitInstance.getHumidityAboveLimit()===3)
+                    newColor='orange'
+                
+            } else if(limitInstance.getHumidityAboveLimit()>0){
+                limitInstance.clearHumidityAboveLimit();
+                newColor='green'
+            }
+            break;
         case 'pressure':
-        if (patameterValue>getPressureLimit()){
-            incrPressureAboveLimit()            
-        }            
+            if (patameterValue>limitInstance.getPressureLimit()){
+                limitInstance.incrPressureAboveLimit()
+                console.log(patameterValue, limitInstance.getPressureAboveLimit())
+                if(limitInstance.getPressureAboveLimit()===5)
+                    newColor='red'
+                else if(limitInstance.getPressureAboveLimit()===3)
+                    newColor='orange'            
+            } else if(limitInstance.getPressureAboveLimit()>0){
+                limitInstance.clearPressureAboveLimit();
+                newColor='green'
+            }     
+            break;     
     }
-    sendCommand("red");
+    if(newColor)
+        sendCommand(newColor, parameterName);
     
 })
 

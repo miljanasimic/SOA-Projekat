@@ -9,8 +9,20 @@
 
     <center>
 
-    <table>
+    <!-- <table>
         <tr><td id="colorChanger" bgcolor="blue" height=300px width=300px></td></tr>
+    </table> -->
+    <table>
+        <tr>
+            <th>Pressure</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+        </tr>
+        <tr>
+            <td id="colorChangerPressure" bgcolor="green" height=100px width=100px></td>
+            <td id="colorChangerTemperature" bgcolor="green" height=100px width=100px></td>
+            <td id="colorChangerHumidity" bgcolor="green" height=100px width=100px></td>
+        </tr>
     </table>
 
     </center>
@@ -27,7 +39,9 @@
             $.getJSON(
                 $SCRIPT_ROOT+"/_ajaxAutoRefresh", 
                 function(data) {
-                document.getElementById("colorChanger").style.backgroundColor=data.color;
+                document.getElementById("colorChangerPressure").style.backgroundColor=data.colorPressure;
+                document.getElementById("colorChangerTemperature").style.backgroundColor=data.colorTemperature;
+                document.getElementById("colorChangerHumidity").style.backgroundColor=data.colorHumidity;
                 }
             );
             setTimeout(arguments.callee, 1000);
