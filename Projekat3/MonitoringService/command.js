@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-const path="http://command:48082/api/v1/device/07e07c76-7e75-474b-a562-40c196d5b79b/command/567afc4c-dbf8-4fc7-9b7a-1afab5e8086c"
+const path="http://edgex-core-command:48082/api/v1/device/name/TestApp/command/color"
 function sendCommand(newColor){
     axios.put(path, {
         color: newColor

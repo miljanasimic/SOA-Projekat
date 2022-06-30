@@ -23,7 +23,7 @@ deviceCommands:
 coreCommands:
   - name: color
     get:
-      path: "/api/v1/device/{deviceId}/changeColor"
+      path: "/readColor"
       responses:
         - code: "200"
           description: "get current color"
@@ -32,7 +32,7 @@ coreCommands:
           description: "service unavailable"
           expectedValues: []
     put:
-      path: "/api/v1/device/{deviceId}/changeColor"
+      path: "/changeColor"
       responses:
         - code: "201"
           description: "set the color"

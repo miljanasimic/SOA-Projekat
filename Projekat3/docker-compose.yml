@@ -474,6 +474,7 @@ services:
 
   color-changer:
     container_name: color-changer
+    hostname: color-changer
     build: ./color-changer-app
     ports:
       - "5000:5000"

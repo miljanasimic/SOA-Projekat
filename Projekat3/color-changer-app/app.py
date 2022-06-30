@@ -14,12 +14,12 @@ def index():
     return content
 
 
-@app.route('/_ajaxAutoRefresh', methods= ['GET'])
+@app.route('/_ajaxAutoRefresh', methods=['GET'])
 def stuff():
     return jsonify(color=color)
 
 
-@app.route('/api/v1/device/register',methods=['POST'])
+@app.route('/api/v1/device/register', methods=['POST'])
 def register():
     request.get_json(force=True)
 
@@ -36,8 +36,8 @@ def register():
     return returnData, 201
 
 
-@app.route('/api/v1/device/<id>/changeColor',methods=['PUT'])
-def changeColor(id):
+@app.route('/changeColor', methods=['PUT'])
+def changeColor():
     global color
     request.get_json(force=True)
 
@@ -47,15 +47,12 @@ def changeColor(id):
 
     color = (args['color'])
 
-    print("requesting device: ", id)
-
     returnData = "Command accepted"
 
     return returnData, 201
 
 
-
 if __name__ == "__main__":
-	app.run(    debug=False, \
-                host='0.0.0.0', \
-                port=int(os.getenv('PORT', '5000')), threaded=True)
+    app.run(debug=False,
+            host='0.0.0.0',
+            port=int(os.getenv('PORT', '5000')), threaded=True)
