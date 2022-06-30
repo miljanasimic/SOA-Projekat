@@ -472,6 +472,14 @@ services:
     networks:
       - edgex-network
 
+  color-changer:
+    container_name: color-changer
+    build: ./color-changer-app
+    ports:
+      - "5000:5000"
+    networks:
+      - edgex-network
+
   # ui:
   #   container_name: edgex-ui-go
   #   hostname: edgex-ui-go
