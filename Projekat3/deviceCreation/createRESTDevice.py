@@ -11,6 +11,7 @@ from datetime import datetime
 
 warnings.filterwarnings("ignore")
 
+# Gather information from arguments
 parser = argparse.ArgumentParser(
     description="Python script for creating a new device from scratch in EdgeX Foundry")
 parser.add_argument('-ip', help='EdgeX Foundry IP address', required=True)
@@ -29,11 +30,11 @@ def createAddressables():
     url = 'http://%s:48081/api/v1/addressable' % edgex_ip
 
     payload = {
-        "name": "App",
+        "name": "TestApp",
         "protocol": "HTTP",
         "address": device_ip,
         "port": 5000,
-        "path": "/api/v1/device/register"  # REST endpoint on the app
+        "path": "/api/v1/device/register"  # REST endpoint on the test app
     }
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(
@@ -50,12 +51,12 @@ def createValueDescriptors():
 
     payload = {
         "name": "color",
-        "description": "Color to be shown in app web UI",
+        "description": "Color to be shown in test app web UI",
         "type": "Str",
         "uomLabel": "color",
                     "defaultValue": "green",
                     "formatting": "%s",
-                    "labels": ["color", "app"]
+                    "labels": ["color", "testapp"]
     }
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(
@@ -89,11 +90,11 @@ def createDeviceService():
     payload = {
         "name": "rest-device-service",
         "description": "Gateway for emergency venting system",
-        "labels": ["color", "app"],
+        "labels": ["color", "testapp"],
         "adminState": "unlocked",
         "operatingState": "enabled",
         "addressable": {
-            "name": "App"
+            "name": "TestApp"
         }
     }
     headers = {'content-type': 'application/json'}
@@ -111,7 +112,7 @@ def addNewDevice():
     url = 'http://%s:48081/api/v1/device' % edgex_ip
 
     payload = {
-        "name": "App",
+        "name": "TestApp",
         "description": "Test application",
         "adminState": "unlocked",
         "operatingState": "enabled",
@@ -123,11 +124,11 @@ def addNewDevice():
             }
         },
         "addressable": {
-            "name": "App"
+            "name": "TestApp"
         },
         "labels": [
             "color",
-            "app"
+            "testapp"
         ],
         "location": "Nis",
         "service": {

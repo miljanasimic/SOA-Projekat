@@ -1,18 +1,11 @@
-const mqtt = require('mqtt')
-const host = 'edgex-mqtt'
-const port = 1883
-const connectUrl = `mqtt://${host}:${port}`
-const client = mqtt.connect(connectUrl)
+const http = require('http');
+const app = require('./app');
 
-const topic = 'edgex-data'
-client.on("connect", ()=> {
-    console.log('Connected')
-    client.subscribe(topic, ()=> {
-        console.log(`Subscribe to topic '${topic}'`)
-    })
-})
+const port = process.env.PORT || 3000;
+app.set('port', port);
+const server = http.createServer(app);
 
-client.on('message', (topic, payload) => {
-    console.log('Received Message:', topic, payload.toString())
-  })
-  
+server.listen(port, () => {
+    console.log(`Server started on port ${port}...`);
+});
+

@@ -3,8 +3,8 @@ manufacturer: "jonamiki.com"
 model: "ABCDE12345"
 labels:
   - "color changer"
-  - "app"
-description: "App for EdgeX Foundry REST commands."
+  - "test app"
+description: "Test app for EdgeX Foundry REST commands."
 
 deviceResources:
   - name: color
