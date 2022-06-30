@@ -7,6 +7,7 @@ COPY VisualizationService/*.csproj ./VisualizationService/
 RUN dotnet restore
 
 COPY VisualizationService/. ./VisualizationService/
+COPY ./dashboards/. ./dashboards/
 
 WORKDIR /app/VisualizationService
 RUN dotnet publish -c Release -o out

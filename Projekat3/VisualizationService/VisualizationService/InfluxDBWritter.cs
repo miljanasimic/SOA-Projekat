@@ -38,7 +38,6 @@ namespace VisualizationService
             {
                 var measurement = new PressureMeasurement
                 {
-                    Origin = reading.Origin,
                     Value = ConvertToDouble(reading.Value),
                     Time = DateTime.UtcNow
                 };
@@ -49,7 +48,6 @@ namespace VisualizationService
             {
                 var measurement = new TemperatureMeasurement
                 {
-                    Origin = reading.Origin,
                     Value = ConvertToDouble(reading.Value),
                     Time = DateTime.UtcNow
                 };
@@ -60,7 +58,6 @@ namespace VisualizationService
             {
                 var measurement = new HumidityMeasurement
                 {
-                    Origin = reading.Origin,
                     Value = ConvertToDouble(reading.Value),
                     Time = DateTime.UtcNow
                 };

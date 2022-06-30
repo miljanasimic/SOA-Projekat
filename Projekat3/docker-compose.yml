@@ -458,6 +458,19 @@ services:
     networks:
       - edgex-network
 
+  grafana:
+    container_name: grafana
+    hostname: grafana
+    image: grafana/grafana
+    ports:
+      - "3005:3000"
+    depends_on:
+      - influx
+    volumes:
+      - ./VisualizationService/provisioning:/etc/grafana/provisioning
+      - ./VisualizationService/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - edgex-network
 
   # ui:
   #   container_name: edgex-ui-go
