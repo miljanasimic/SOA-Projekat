@@ -441,6 +441,36 @@ services:
     networks:
       - edgex-network
 
+  influx:
+    container_name: influx
+    image: influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminadmin
+      - DOCKER_INFLUXDB_INIT_ORG=soa_um
+      - DOCKER_INFLUXDB_INIT_BUCKET=sensordata
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=token
+    volumes:
+      - ./influx/data:/var/lib/influxdb
+    ports:
+      - "8086:8086"
+    networks:
+      - edgex-network
+
+  grafana:
+    container_name: grafana
+    hostname: grafana
+    image: grafana/grafana
+    ports:
+      - "3005:3000"
+    depends_on:
+      - influx
+    volumes:
+      - ./VisualizationService/provisioning:/etc/grafana/provisioning
+      - ./VisualizationService/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - edgex-network
 
   # ui:
   #   container_name: edgex-ui-go

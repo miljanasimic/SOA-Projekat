@@ -44,12 +44,12 @@ namespace VisualizationService
 
                 foreach (var reading in edgexMessage.Readings)
                 {
-                    Console.WriteLine(JsonConvert.SerializeObject(reading));
+                    InfluxDBWritter.WriteToInflux(reading);
                 }
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
         }
     }
