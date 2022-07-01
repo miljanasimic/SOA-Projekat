@@ -27,7 +27,7 @@ Korisnički interfejs InfluxDB baze je dostupan na adresi na adresi *http://loca
 
 >docker-compose up -d
 
->pokretanje shell skripte starting_script, za Windows potrebno je pokrenuti iz Git Bash-a
+>pokretanje shell skripte starting_script, za Windows potrebno je pokrenuti iz Git Bash-a **komandom _bash starting_script.sh_**
 
 Korisnički interfejs InfluxDB baze je dostupan na adresi na adresi *http://localhost:8086*, **username: _admin_**, **password: _adminadmin_**
 
